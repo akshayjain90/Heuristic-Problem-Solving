@@ -1,0 +1,30 @@
+------------------------
+ Implemented by : Rahul Manghwani and Xiang Zhang
+ New York University
+ Heuristic Problem Solving Fall 2012
+--------------------
+
+
+
+----------- Game Could be run with server as ------
+Run the client as:
+
+> python client.py <team-name>
+
+Prompts for port-no . Enter it
+
+-----------  Python middleware calls c exe for every decision. 
+	     To run it as a exe : ./arx-prune < begin.config                
+-----------        
+
+
+---------------------- GAME DETAILS ----------------------------
+ Given a uniform, flat board (made of a titanium alloy) 30 meters long and weighing 3 kilograms, consider it ranging from -15 meters to 15 meters. So the center of gravity is at 0. We place two supports of equal heights at positions -3 and -1 and a 3 kilogram block at position -4.
+
+The No Tipping game is a two person game that works as follows: the two players each start with 12 blocks having weights 1 kg through 12 kg. The first player places one block anywhere on the board, then the second player places one block anywhere on the board, and play alternates with each player placing one block until the second player places his or her last block. (No player may not place one block above another one, so each position will have at most one block.) If after any ply, the placement of a block causes the board to tip, then the player who did that ply loses. Suppose that the board hasn't tipped by the time the last block is placed. Then the players remove one block at a time in turns. At each ply, the second player may remove a block placed by any player. The first player may not remove any blocks placed by the second player unless those are the only blocks left. (In other words, the first player may remove only his or her own blocks or the original block unless the only blocks left are those of the second player.) If the board tips following a removal, then the player who removed the last block loses.
+
+As the game proceeds, the net torque around each support is calculated and displayed. The blocks, whether on the board or in the possession of the players, are displayed with their weight values. 
+
+
+See : http://cs.nyu.edu/courses/Fall12/CSCI-GA.2965-001/notipping.html
+------------------------------------------------------------------
