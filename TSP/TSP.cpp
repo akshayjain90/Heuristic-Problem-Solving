@@ -1,6 +1,6 @@
 /* Author : Rahul Manghwani @ New York University
    Travelling Salesman Problem : Uses Christophides approximation and 2 opt heuristic.
-   Solution is within 1.2 to 1.3 % of optimal 
+    Solution is within 1.2 to 1.3 % of optimal 
 */
 
 #ifndef KK
