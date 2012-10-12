@@ -16,6 +16,12 @@ http://en.wikipedia.org/wiki/Christofides_algorithm
 
 Perfect Matching which is a substep of the algorithm was implemented by using a library based on Blossom's Algorithm
 
+Heuristic: After Christofies generates a tour we apply 2-opt optimization which basically takes two pairs of cities (c1,c2) and (c3,c4)
+If distance between c1,c2 + c3,c4 > c1,c3 + c2,c4 we simply change c2 , c3 in place and reverse the path between them. 
+
+We apply this Heuristic for 100 iterations and we managed to get the solution which was within 1.1 to 1.3% of the optimal solution.
+
+
 Compile : make
 Run : ./blossom5 travelingtest.txt
 Output will be in TSPData.txt

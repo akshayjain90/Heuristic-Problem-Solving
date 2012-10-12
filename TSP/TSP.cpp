@@ -1,3 +1,8 @@
+/* Author : Rahul Manghwani @ New York University
+   Travelling Salesman Problem : Uses Christophides approximation and 2 opt heuristic.
+   Solution is within 1.2 to 1.3 % of optimal 
+*/
+
 #ifndef KK
  #define KK
  #include "graph.h"
@@ -26,6 +31,9 @@ using namespace std;
 
 //Does a Euler Tour on the graph and returns the edges 
 vector<int> EulerTour(graph* mg);
+void doTwoOptimization(vector<int>& tour, map<int, map<int,double> >& cityToOtherCities );
+
+
 
 int main(int argc, char* argv[])
 {
@@ -245,6 +253,8 @@ int main(int argc, char* argv[])
   }
 */
 
+  doTwoOptimization(tsp, cityToOtherCities);
+
   double totalScore = 0;
   for(vector<int>::iterator it = tsp.begin(); it < tsp.end()-1; it++) 
   {
@@ -257,6 +267,101 @@ int main(int argc, char* argv[])
   output.close();
   return 0;
 }
+
+//Perform 2-opt optimization on this tour
+//Logic Goes like this 
+//Take a list of cities in order of the path
+//For each pair of cities, compare their edge to other edges with do not share this pair
+//Check if distance of city(c1,c2) + city(c3,c4) > city(c1, c3) + city(c2, c4)
+//Check if this would be good swap
+//If yes move the cities and reverse the path between them.
+
+void doTwoOptimization(vector<int>& tour, map<int, map<int,double> >& cityToOtherCities ) 
+{
+
+   int city1, city2, city3, city4;
+
+   int i,j,k;
+   double oldpairsDis = 0.0;
+   double newpairsDis = 0.0;
+   double reduction, bestReduction = 0.0;
+   int bestC1,bestC2,bestC3,bestC4;
+   bool swapFound = false;   
+   double threshold = 0.1; //How much low the reduction should be
+   bool earlyBreak = false;  
+
+for(k = 1; k <=200; k++)
+{
+   swapFound = false;
+   earlyBreak = false;
+   bestReduction = 0.0;
+   for(i = 0; i < tour.size() - 3; i++) //Going from 0 to 997.
+   {
+	city1 = tour.at(i);
+	city2 = tour.at(i+1);
+	
+	for(j = i + 2; j + 1 < tour.size() ; j++)
+	{
+	   city3 = tour.at(j);
+	   city4 = tour.at(j+1);
+
+	   oldpairsDis = (double)cityToOtherCities[city1][city2] + (double)cityToOtherCities[city3][city4];
+	   newpairsDis = (double)cityToOtherCities[city1][city3] + (double)cityToOtherCities[city2][city4];
+		 
+           reduction = oldpairsDis - newpairsDis;
+	   if(reduction > bestReduction)
+	   {
+	      //std::cout << "Found a reduction:" << std::endl;
+	      bestReduction = reduction;
+	      bestC1 = i;
+	      bestC2 = i + 1;
+	      bestC3 = j;
+	      bestC4 = j + 1;		      		
+	      swapFound = true;
+	      if( reduction/oldpairsDis <= threshold) {
+		earlyBreak = true;
+		break;
+	      } 	      
+	   }
+	}
+
+	if(earlyBreak == true)
+	{
+	  break;	
+	}
+   }
+
+   //Only if the swap was found will be change the tour
+   if(swapFound) {
+        //std::cout << "Swapping..." << std::endl;		
+	//Swap the cities c2 and c3 in place
+	int temp = tour.at(bestC2);
+	tour.at(bestC2) = tour.at(bestC3);
+	tour.at(bestC3) = temp;
+
+	bestC2++;
+	bestC3--;
+  	//Reverse the path between c2 and c3
+	  while (bestC2 < bestC3) 
+	  {
+		int temp = tour.at(bestC2);
+	        tour.at(bestC2) = tour.at(bestC3);
+        	tour.at(bestC3) = temp;
+		bestC2++;
+		bestC3--;
+	  }
+
+	  double totalScore;
+	  for(vector<int>::iterator it = tour.begin(); it < tour.end()-1; it++)
+          {
+                totalScore = (double)(totalScore + (double)cityToOtherCities[*it][*(it+1)]);
+          }	
+      }
+   }
+
+}
+
+
 
 
 edgenode* getMinEdge(graph* mg,int curVertex) 
